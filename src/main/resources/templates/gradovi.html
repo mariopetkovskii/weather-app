@@ -1,0 +1,127 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            Weather forecast
+            <br/>
+            <div class="circle">
+                <h6 style="padding-top: 20px" th:text="${items.getLocation().getName()}"></h6>
+                <h3 style="padding-top: 5px" th:text="${items.getCurrent().getTemp_c()}"></h3>
+                <h6 th:text="${items.getLocation().getCountry()}"></h6>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="square">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Feels like</h6>
+                        <h4 th:text="${items.getCurrent().getFeelslike_c()}"></h4>
+                        <br/>
+                        <h6>UV index</h6>
+                        <h4 th:text="${items.getCurrent().getUv()}"></h4>
+                        <br/>
+                        <h6>Air Quality</h6>
+                        <h4 th:text="${items.getCurrent().getAir_quality().getAirQuality()}"></h4>
+                        <br/>
+                        <h6>Wind speed</h6>
+                        <h4 th:text="${items.getCurrent().getWind_kph()}"></h4>
+                        <br/>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Humidity</h6>
+                        <h4 th:text="${items.getCurrent().getHumidity()}"></h4>
+                        <br/>
+                        <h6>Pressure</h6>
+                        <h4 th:text="${items.getCurrent().getPressure_mb()}"></h4>
+                        <br/>
+                        <h6>Cloudiness</h6>
+                        <h4 th:text="${items.getCurrent().getCloud()}"></h4>
+                        <br/>
+                        <h6>Precipitation</h6>
+                        <h4 th:text="${items.getCurrent().getPrecip_mm()}"></h4>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="col-md-4">
+            <div style="padding-top: 15px">
+                <div class="input-group">
+                    <form class="form-signin mt-xl-5" method="post" action="/gradovi">
+                        <label for="city" class="sr-only">City</label>
+                        <input type="text" id="city" name="city" class="form-control rounded" placeholder="Search city"
+                               required>
+                        <button type="submit" class="btn btn-outline-primary">Search</button>
+                        <div th:if="${hasError}">
+                            <div th:text="${error}" class="text-danger"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <br>
+            <form method="post" th:action="@{'/gradovi/search'}">
+            <select name="search"class="browser-default custom-select">
+                <option selected value="" disabled>-Select city-</option>
+                <option th:each="city : ${cities}" th:text="${city.getCity()}"></option>
+            </select>
+                </br>
+                <button type="submit" class="btn btn-info" >Search</button>
+                <br/>
+            </form>
+
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="margin: auto">
+        Click here for more air quality informations
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Air Quality</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>No2</h6>
+                            <p th:text="${items.getCurrent().getAir_quality().getNo2}"></p>
+                            <h6>Co: </h6>
+                            <p th:text="${items.getCurrent().getAir_quality().getCo()}"></p>
+                            <h6>O3: </h6>
+                            <p th:text="${items.getCurrent().getAir_quality().getO3()}"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>So2: </h6>
+                            <p th:text="${items.getCurrent().getAir_quality().getSo2()}"></p>
+                            <br/>
+                            <h6>PM2_5: </h6>
+                            <p th:text="${items.getCurrent().getAir_quality().getPm2_5()}"></p>
+                            <h6>PM10: </h6>
+                            <p th:text="${items.getCurrent().getAir_quality().getPm10()}"></p>
+                        </div>
+                        <div class="container">
+                            <h6 class="text-danger" th:text="${items.getCurrent().getAir_quality().AirQualityInfo()}"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="col-sm-12 col-md-12">
+            <a href="/gradovi/add-form" class="btn btn-block btn-dark add-product-btn">Add new city</a>
+        </div>
+    </th:block>
+</div>
+
+
+
